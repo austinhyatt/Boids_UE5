@@ -11,4 +11,4 @@ Implemented further tweaks
 - Limiting Maximum Speed of boids
 - Bounding the position of boids within a box
 
-Demo Video in repository. "BoidsDemo.mp4"
+Demo Video in repository (BoidsDemo.mp4) and posted to youtube (https://youtu.be/ju5eYW4WPJ4)
