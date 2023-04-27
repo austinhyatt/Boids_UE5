@@ -1,6 +1,5 @@
 # Boids_AgentBasedSimulation
-Austin Hyatt
-
+Austin Hyatt<br>
 Class project for IMGD 4000 simulating the boids flocking algorithm in Unreal Engine 5 with C++
 
 Implemented 3 rules for emergent flocking behavior
