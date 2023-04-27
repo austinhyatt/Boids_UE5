@@ -1,6 +1,11 @@
 #include "FlockingManager.h"
 
 #define AGENT_COUNT 10
+#define FLOCK_TO_CENTER 100
+#define PROXIMITY_DIST 100
+#define SPEED_STRENGTH 8
+#define MAX_SPEED 50
+#define BOX_SIZE 1200
 
 void UFlockingManager::Init(UWorld* world, UStaticMeshComponent* mesh) {
     UE_LOG(LogTemp, Warning, TEXT("Manager initialized"));
@@ -47,7 +52,7 @@ FVector UFlockingManager::Rule1(AAgent* Agent) {
         averagePos += Agents[i]->GetActorLocation();
     }
     averagePos /= AGENT_COUNT - 1;
-    return (averagePos - Agent->GetActorLocation()) / 100; //scale
+    return (averagePos - Agent->GetActorLocation()) / FLOCK_TO_CENTER;
     
 }
 
@@ -58,7 +63,7 @@ FVector UFlockingManager::Rule2(AAgent* Agent) {
     for (int i = 0; i < AGENT_COUNT; i++) {
         if (Agents[i] == Agent)
             continue;
-        if ((Agents[i]->GetActorLocation() - Agent->GetActorLocation()).GetAbs().Size() < 100) //dist
+        if ((Agents[i]->GetActorLocation() - Agent->GetActorLocation()).GetAbs().Size() < PROXIMITY_DIST)
             flockProximity -= (Agents[i]->GetActorLocation() - Agent->GetActorLocation());
     }
     
@@ -74,18 +79,18 @@ FVector UFlockingManager::Rule3(AAgent* Agent) {
         averageVelocity += Agents[i]->Velocity;
     }
     averageVelocity /= AGENT_COUNT - 1;
-    return (averageVelocity - Agent->Velocity) / 8; //speed
+    return (averageVelocity - Agent->Velocity) / SPEED_STRENGTH;
 }
 
 void UFlockingManager::LimitVelocity(AAgent* Agent) {
-    int vlim = 50; //max speed
+    int vlim = MAX_SPEED;
     if ((Agent->Velocity).GetAbs().Size() > vlim)
         Agent->Velocity = (Agent->Velocity / (Agent->Velocity).GetAbs().Size()) * vlim;
 }
 
 FVector UFlockingManager::Boundary(AAgent* Agent) {
         
-    int boxSize = 1000; //box size
+    int boxSize = BOX_SIZE;
     int Xmin=-boxSize, Xmax=boxSize, Ymin=-boxSize, Ymax= boxSize, Zmin=0, Zmax= boxSize*2;
     int boundForce = 10;
     FVector boundVelocity = FVector();
